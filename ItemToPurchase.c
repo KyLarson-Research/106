@@ -15,7 +15,7 @@ void MakeItemBlank(ItemToPurchase *ItP){
 void PrintItemCost(ItemToPurchase *ItP){
    printf("%s", ItP->itemName);
    printf(" %d @", ItP->itemQuantity);
-   printf(" $%d = %d", ItP->itemPrice, ItP->itemQuantity*(ItP->itemPrice));
+   printf(" $%d = $%d\n", ItP->itemPrice, ItP->itemQuantity*(ItP->itemPrice));
    return;
 
 }
