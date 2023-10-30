@@ -5,10 +5,11 @@
 typedef struct ItemToPurchase{
    int itemPrice;
    int itemQuantity;
-   char itemName[];//this has to be the last element of the struct and there may only be one array
+   char itemName[50];
+   char itemDescription[50];
 } ItemToPurchase;
 
 void MakeItemBlank(ItemToPurchase *ItP);
-void PrintItemCost(ItemToPurchase *ItP);
-
+void PrintItemCost(ItemToPurchase ItP);
+void PrintItemDescription(ItemToPurchase ItP);
 #endif
