@@ -75,3 +75,15 @@ void PrintItemDescriptions(ShoppingCart SC){
    }
    return;
 }
+
+ItemToPurchase GetItem(char *ItemName, int length, ShoppingCart SC){
+   int i;
+   for(i=0; i<SC.cartSize; i++){
+      if(strcmp(ItemName, SC.cartItems[i].itemName)==0){
+         break;
+      }
+   }
+   return SC.cartItems[i];
+}
+
+

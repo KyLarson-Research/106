@@ -18,7 +18,22 @@ void PrintMenu(){
    printf("Choose an option:\n");
    return;
 }
-
+void removeNewLine(char *string, int length){
+   for(int i=0; i<length; i++){//make sure it is a string
+                if(string[i]=='\n'){
+                   string[i] = '\0';
+                }
+             }
+   return;
+}
+void inputClearNewLine(){
+   char c;
+   c = getchar();
+   while(c != '\n' && c != EOF) {
+      c = getchar();
+   }
+   return;
+}
 ShoppingCart ExecuteMenu(char option, ShoppingCart SC){
    
        switch(option)
@@ -26,35 +41,52 @@ ShoppingCart ExecuteMenu(char option, ShoppingCart SC){
           case 'a': //add item to cart
              char s;
              int price, qty;
-             ItemToPurchase ItP;
+             ItemToPurchase ItPa;
              
              printf("ADD ITEM TO CART\nEnter the item name:\n");
              fflush(stdin);
-             fgets(ItP.itemName, sizeof(ItP.itemName), stdin);
-             for(int i=0; i<strlen(ItP.itemName); i++){//make sure it is a string
-                if(ItP.itemName[i]=='\n'){
-                   ItP.itemName[i] = '\0';
-                }
-             }
+             fgets(ItPa.itemName, sizeof(ItPa.itemName), stdin);
+             removeNewLine(ItPa.itemName, strlen(ItPa.itemName));
              printf("Enter the item description:\n");
              fflush(stdin);
-             fgets(ItP.itemDescription, sizeof(ItP.itemDescription), stdin);
-             for(int i=0; i<strlen(ItP.itemDescription); i++){//make sure it is a string
-                if(ItP.itemDescription[i]=='\n'){
-                   ItP.itemDescription[i] = '\0';
-                }
-             }
+             fgets(ItPa.itemDescription, sizeof(ItPa.itemDescription), stdin);
+             removeNewLine(ItPa.itemDescription, strlen(ItPa.itemDescription));
              printf("Enter the item price:\n");
-             scanf("%d", &ItP.itemPrice);
+             scanf("%d", &ItPa.itemPrice);
              printf("Enter the item quantity:\n");
-             scanf("%d", &ItP.itemQuantity);//now push it
-             if(SC.cartSize!=10){SC.cartItems[SC.cartSize] = ItP; SC.cartSize++;}
+             scanf("%d", &ItPa.itemQuantity);//now push it
+             inputClearNewLine();
+             fflush(stdin);
+             if(SC.cartSize!=10){SC = AddItem(ItPa, SC);}
              else{printf("CART IS FULL\n");}
           break;
-          case 'r': break;
-          case 'c': break;
-          case 'i': break;//descriptions
-          case 'o': break;//shopping cart
+          case 'r': 
+             char removeName[50];
+             printf("REMOVE ITEM FROM CART\nEnter name of item to remove:\n");
+             fflush(stdin);
+             fgets(removeName, sizeof(removeName), stdin);
+             removeNewLine(removeName, strlen(removeName));
+             SC = RemoveItem(removeName, SC);
+          break;
+          case 'c': 
+             ItemToPurchase ItPb;
+             printf("CHANGE ITEM QUANTITY\nEnter the item name:\n");
+             fflush(stdin);
+             fgets(ItPb.itemName, sizeof(ItPb.itemName), stdin);
+             removeNewLine(ItPb.itemName, strlen(ItPb.itemName));
+             ItPb = GetItem(ItPb.itemName, strlen(ItPb.itemName), SC);
+             printf("Enter the new quantity:\n");
+             scanf("%d", &ItPb.itemQuantity);
+             SC = ModifyItem(ItPb, SC);
+          break;
+          case 'i': 
+             printf("OUTPUT ITEMS' DESCRIPTIONS\n");
+             PrintItemDescriptions(SC);
+          break;//descriptions
+          case 'o':
+             printf("OUTPUT SHOPPING CART\n");
+             PrintTotal(SC); 
+          break;//shopping cart
           
        }
    return SC;
@@ -76,18 +108,13 @@ int main(void) {
    printf("Enter today's date:\n");
    scanf("%s", SC.currentDate);
    printf("\nCustomer name: %s\nToday's date: %s\n", SC.customerName, SC.currentDate);
-   //require an aditional new line to begin the next item entry
-   c = getchar();
-   while(c != '\n' && c != EOF) {
-      c = getchar();
-   }
+   inputClearNewLine();
    
    while(c != 'q'){
       PrintMenu();
       
       scanf("%c", &c);
-      s = getchar();
-      while(s != '\n' && s != EOF) { s = getchar(); }//filter the extra new line
+      inputClearNewLine();
       
       SC = ExecuteMenu(c, SC);
       
