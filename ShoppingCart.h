@@ -2,6 +2,8 @@
 #define SHOPPING_CART_H
 #define MAX_BUF 50
 #define MAX_SLT 10
+#include "ItemToPurchase.h"
+
 typedef struct ShoppingCart{
    char customerName[MAX_BUF];
    char currentDate[MAX_BUF];
@@ -17,5 +19,5 @@ int GetNumItemsInCart(ShoppingCart SC);
 int GetCostOfCart(ShoppingCart SC);
 int PrintTotal(ShoppingCart SC);
 void PrintDescriptions(ShoppingCart SC);
-
+ItemToPurchase  GetItem(char *ItemName, int length, ShoppingCart SC);
 #endif

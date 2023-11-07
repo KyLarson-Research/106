@@ -15,11 +15,12 @@ void PrintMenu(){
    printf("o - Output shopping cart\n");
    printf("q - Quit\n");
    printf("\n");
-   printf("Choose an option:\n");
+   //printf("Choose an option:\n");
    return;
 }
 void removeNewLine(char *string, int length){
-   for(int i=0; i<length; i++){//make sure it is a string
+   int i;
+   for(i=0; i<length; i++){//make sure it is a string
                 if(string[i]=='\n'){
                    string[i] = '\0';
                 }
@@ -35,21 +36,19 @@ void inputClearNewLine(){
    return;
 }
 ShoppingCart ExecuteMenu(char option, ShoppingCart SC){
-   
+       ItemToPurchase ItPa;
+       char removeName[50];
+       ItemToPurchase ItPb;
        switch(option)
        {
           case 'a': //add item to cart
-             char s;
-             int price, qty;
-             ItemToPurchase ItPa;
-             
              printf("ADD ITEM TO CART\nEnter the item name:\n");
              fflush(stdin);
-             fgets(ItPa.itemName, sizeof(ItPa.itemName), stdin);
+             fgets(ItPa.itemName, 50, stdin);
              removeNewLine(ItPa.itemName, strlen(ItPa.itemName));
              printf("Enter the item description:\n");
              fflush(stdin);
-             fgets(ItPa.itemDescription, sizeof(ItPa.itemDescription), stdin);
+             fgets(ItPa.itemDescription, 50, stdin);
              removeNewLine(ItPa.itemDescription, strlen(ItPa.itemDescription));
              printf("Enter the item price:\n");
              scanf("%d", &ItPa.itemPrice);
@@ -61,7 +60,6 @@ ShoppingCart ExecuteMenu(char option, ShoppingCart SC){
              else{printf("CART IS FULL\n");}
           break;
           case 'r': 
-             char removeName[50];
              printf("REMOVE ITEM FROM CART\nEnter name of item to remove:\n");
              fflush(stdin);
              fgets(removeName, sizeof(removeName), stdin);
@@ -69,7 +67,6 @@ ShoppingCart ExecuteMenu(char option, ShoppingCart SC){
              SC = RemoveItem(removeName, SC);
           break;
           case 'c': 
-             ItemToPurchase ItPb;
              printf("CHANGE ITEM QUANTITY\nEnter the item name:\n");
              fflush(stdin);
              fgets(ItPb.itemName, sizeof(ItPb.itemName), stdin);
@@ -81,37 +78,37 @@ ShoppingCart ExecuteMenu(char option, ShoppingCart SC){
           break;
           case 'i': 
              printf("OUTPUT ITEMS' DESCRIPTIONS\n");
-             PrintItemDescriptions(SC);
+             PrintDescriptions(SC);
           break;//descriptions
           case 'o':
              printf("OUTPUT SHOPPING CART\n");
              PrintTotal(SC); 
           break;//shopping cart
+          default: return SC;
           
        }
    return SC;
 }
 
 int main(void) {
-  
- 
- 
-    
-   const int maxbuf =50;
-   int price1, price2, qty1, qty2;
-   char buf1[maxbuf], buf2[maxbuf], c='y', s; 
+
+   char c='y'; 
    ShoppingCart SC;
-   printf("Enter customer's name:\n");
+   printf("Enter Customer's Name:\n");
    fflush(stdin);
    fgets(SC.customerName, sizeof(SC.customerName), stdin);
-   SC.customerName[strlen(SC.customerName)-1] = '\0'; //remove the new line that gets captured
-   printf("Enter today's date:\n");
-   scanf("%s", SC.currentDate);
-   printf("\nCustomer name: %s\nToday's date: %s\n", SC.customerName, SC.currentDate);
-   inputClearNewLine();
+   removeNewLine(SC.customerName, strlen(SC.customerName));
    
+   printf("Enter Today's Date:\n");
+   fflush(stdin);
+   fgets(SC.currentDate, sizeof(SC.currentDate), stdin);
+   removeNewLine(SC.currentDate, strlen(SC.currentDate));
+   printf("\nCustomer Name: %s\nToday's Date: %s\n\n", SC.customerName, SC.currentDate);
+   
+   SC.cartSize =0;
+   PrintMenu();
    while(c != 'q'){
-      PrintMenu();
+      printf("Choose an option:\n");
       
       scanf("%c", &c);
       inputClearNewLine();
@@ -121,7 +118,7 @@ int main(void) {
    }
    /*
    //
-   ///*Appendix- The following is part 1 and testing
+   //Appendix- The following is part 1 and testing
    //
    printf("Item 1\nEnter the item name:\n");
    fflush(stdin);
@@ -182,7 +179,7 @@ int main(void) {
    SC = AddItem(B, SC);
    
    printf("%d cart size, %s item 1, %s item 2\n", SC.cartSize, SC.cartItems[0].itemName, SC.cartItems[1].itemName);
-   /*
+   
    printf("Testing Remove Item\n");
    SC = RemoveItem(A.itemName, SC);
    printf("%d cart size, %s first item\n", SC.cartSize, SC.cartItems[0].itemName);
